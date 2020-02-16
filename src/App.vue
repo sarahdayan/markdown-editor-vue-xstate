@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { Machine, interpret } from 'xstate';
+import { Machine, State, interpret } from 'xstate';
 import MarkdownIt from 'markdown-it';
 import { indent } from 'indent.js';
 
@@ -82,6 +82,10 @@ const swapMachine = Machine({
   }
 });
 
+const savedState = JSON.parse(localStorage.getItem("state"));
+const previousState = State.create(savedState || swapMachine.initialState);
+const resolvedState = swapMachine.resolveState(previousState);
+
 export default {
   name: 'App',
   components: { EyeIcon, EyeOffIcon, CodeIcon, MenuIcon },
@@ -111,8 +115,14 @@ export default {
     this.swapService
       .onTransition(state => {
         this.current = state;
+
+        try {
+          localStorage.setItem("state", JSON.stringify(this.current));
+        } catch (e) {
+          console.error("Local storage is unavailable");
+        }
       })
-      .start();
+      .start(resolvedState);
   },
 };
 </script>
