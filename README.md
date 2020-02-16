@@ -1,4 +1,8 @@
-# markdown-editor-xstate
+# markdown-editor-vue-xstate
+
+> A Markdown Editor in Vue.js and XState
+
+![Markdown Editor in Vue.js and XState](preview.png)
 
 ## Project setup
 ```
@@ -19,6 +23,3 @@ yarn build
 ```
 yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
