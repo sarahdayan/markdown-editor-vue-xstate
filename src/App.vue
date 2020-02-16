@@ -26,7 +26,7 @@
         <code-icon v-show="current.matches('visible.rendered')" />
       </button>
       <button
-        :aria-label="current.matches('hidden') ? 'Show editor' : 'Hide editor'"
+        :aria-label="current.matches('hidden') ? 'Show preview' : 'Hide preview'"
         class="btn"
         @click="send('TOGGLE')"
       >
@@ -50,33 +50,36 @@ import MenuIcon from '@/assets/icons/menu.svg';
 const md = new MarkdownIt();
 
 const swapMachine = Machine({
-  id: 'swap',
-  initial: 'visible',
+  id: "swap",
+  initial: "visible",
   states: {
     visible: {
       on: {
-        TOGGLE: 'hidden',
+        TOGGLE: "hidden"
       },
-      initial: 'rendered',
+      initial: "rendered",
       states: {
         rendered: {
           on: {
-            SWAP: 'raw',
-          },
+            SWAP: "raw"
+          }
         },
         raw: {
           on: {
-            SWAP: 'rendered',
-          },
+            SWAP: "rendered"
+          }
         },
-      },
+        memo: {
+          type: "history"
+        }
+      }
     },
     hidden: {
       on: {
-        TOGGLE: 'visible',
-      },
-    },
-  },
+        TOGGLE: "visible.memo"
+      }
+    }
+  }
 });
 
 export default {
