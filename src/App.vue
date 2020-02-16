@@ -7,9 +7,9 @@
         class="render markdown-body"
         v-html="rendered"
       />
-      <pre v-show="current.matches('visible.raw')" class="render raw">
-        {{ raw }}
-      </pre>
+      <pre v-show="current.matches('visible.raw')" class="render raw">{{
+        raw
+      }}</pre>
     </div>
     <div class="toggle">
       <button
