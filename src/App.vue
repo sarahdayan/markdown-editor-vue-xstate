@@ -107,9 +107,9 @@ export default {
     return {
       swapService: interpret(swapMachine),
       current: swapMachine.initialState,
-      content:
-        savedData.trim() ||
-        '# Hello there!\n\n- Type some Markdown on the left\n- See HTML in the right\n- Magic\n\n![An orange jellyfish](https://i.picsum.photos/id/1069/400/250.jpg)',
+      content: savedData
+        ? savedData.trim()
+        : '# Hello there!\n\n- Type some Markdown on the left\n- See HTML in the right\n- Magic\n\n![An orange jellyfish](https://i.picsum.photos/id/1069/400/250.jpg)',
     };
   },
   computed: {
