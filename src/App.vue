@@ -6,11 +6,11 @@
       <pre v-show="current.matches('visible.raw')" class="render raw">{{ raw }}</pre>
     </div>
     <div class="toggle">
-      <button class="btn" v-show="current.matches('visible')" @click="send('SWAP')">
+      <button :aria-label="current.matches('visible.raw') ? 'Show rendered Markdown' : 'Show HTML code'" class="btn" v-show="current.matches('visible')" @click="send('SWAP')">
         <menu-icon v-show="current.matches('visible.raw')" />
         <code-icon v-show="current.matches('visible.rendered')" />
       </button>
-      <button class="btn" @click="send('TOGGLE')">
+      <button :aria-label="current.matches('hidden') ? 'Show editor' : 'Hide editor'" class="btn" @click="send('TOGGLE')">
         <eye-icon v-show="current.matches('hidden')" />
         <eye-off-icon v-show="current.matches('visible')" />
       </button>
