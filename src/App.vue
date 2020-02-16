@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { Machine, State, interpret } from 'xstate';
+import { createMachine, State, interpret } from 'xstate';
 import MarkdownIt from 'markdown-it';
 import { indent } from 'indent.js';
 import debounce from 'lodash.debounce';
@@ -52,8 +52,7 @@ import MenuIcon from './assets/icons/menu.svg';
 
 const md = new MarkdownIt();
 
-// eslint-disable-next-line new-cap
-const swapMachine = Machine({
+const swapMachine = createMachine({
   id: 'swap',
   initial: 'visible',
   states: {
