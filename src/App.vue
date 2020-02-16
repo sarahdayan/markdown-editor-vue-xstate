@@ -7,9 +7,9 @@
         class="render markdown-body"
         v-html="rendered"
       />
-      <pre v-show="current.matches('visible.raw')" class="render raw">{{
-        raw
-      }}</pre>
+      <pre v-show="current.matches('visible.raw')" class="render raw">
+        {{ raw }}
+      </pre>
     </div>
     <div class="toggle">
       <button
@@ -45,13 +45,14 @@ import MarkdownIt from 'markdown-it';
 import { indent } from 'indent.js';
 import debounce from 'lodash.debounce';
 
-import EyeIcon from '@/assets/icons/eye.svg';
-import EyeOffIcon from '@/assets/icons/eye-off.svg';
-import CodeIcon from '@/assets/icons/code.svg';
-import MenuIcon from '@/assets/icons/menu.svg';
+import EyeIcon from './assets/icons/eye.svg';
+import EyeOffIcon from './assets/icons/eye-off.svg';
+import CodeIcon from './assets/icons/code.svg';
+import MenuIcon from './assets/icons/menu.svg';
 
 const md = new MarkdownIt();
 
+// eslint-disable-next-line new-cap
 const swapMachine = Machine({
   id: 'swap',
   initial: 'visible',
@@ -94,8 +95,8 @@ const resolvedState = swapMachine.resolveState(previousState);
 const persistData = debounce(data => {
   try {
     localStorage.setItem('data', data);
-  } catch (e) {
-    console.error('Local storage is unavailable');
+  } finally {
+    // continue regardless of error
   }
 }, 500);
 
@@ -138,8 +139,8 @@ export default {
 
         try {
           localStorage.setItem('state', JSON.stringify(this.current));
-        } catch (e) {
-          console.error('Local storage is unavailable');
+        } finally {
+          // continue regardless of error
         }
       })
       .start(resolvedState);
