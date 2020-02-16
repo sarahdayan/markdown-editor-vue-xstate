@@ -1,28 +1,98 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <textarea class="editor" v-model="content" spellcheck="false" />
+      <div v-show="current.matches('visible.rendered')" class="render markdown-body" v-html="rendered" />
+      <pre v-show="current.matches('visible.raw')" class="render raw">{{ raw }}</pre>
+    </div>
+    <div class="toggle">
+      <button class="btn" v-show="current.matches('visible')" @click="send('SWAP')">
+        <menu-icon v-show="current.matches('visible.raw')" />
+        <code-icon v-show="current.matches('visible.rendered')" />
+      </button>
+      <button class="btn" @click="send('TOGGLE')">
+        <eye-icon v-show="current.matches('hidden')" />
+        <eye-off-icon v-show="current.matches('visible')" />
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { Machine, interpret } from 'xstate'
+import MarkdownIt from 'markdown-it'
+import { indent } from 'indent.js'
+
+import EyeIcon from '@/assets/icons/eye.svg'
+import EyeOffIcon from '@/assets/icons/eye-off.svg'
+import CodeIcon from '@/assets/icons/code.svg'
+import MenuIcon from '@/assets/icons/menu.svg'
+
+const md = new MarkdownIt()
+
+const swapMachine = Machine({
+  id: 'swap',
+  initial: 'visible',
+  states: {
+    visible: {
+      on: {
+        TOGGLE: 'hidden'
+      },
+      initial: 'rendered',
+      states: {
+        rendered: {
+          on: {
+            SWAP: 'raw'
+          }
+        },
+        raw: {
+          on: {
+            SWAP: 'rendered'
+          }
+        }
+      }
+    },
+    hidden: {
+      on: {
+        TOGGLE: 'visible'
+      }
+    }
+  }
+});
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: { EyeIcon, EyeOffIcon, CodeIcon, MenuIcon },
+  data() {
+    return {
+      swapService: interpret(swapMachine),
+      current: swapMachine.initialState,
+      content: '# Hello there!\n\n- Type some Markdown on the left\n- See HTML in the right\n- Magic\n\n![An orange jellyfish](https://i.picsum.photos/id/1069/400/250.jpg)'
+    }
+  },
+  computed: {
+    rendered() {
+      return md.render(this.content)
+    },
+    raw() {
+      return indent.html(this.rendered, {
+        tabString: '  '
+      })
+    }
+  },
+  methods: {
+    send(event) {
+      this.swapService.send(event)
+    }
+  },
+  created() {
+    this.swapService
+      .onTransition(state => {
+        this.current = state
+      })
+      .start()
+  },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style src="./assets/styles.css" />
