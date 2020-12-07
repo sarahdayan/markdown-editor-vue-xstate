@@ -15,7 +15,7 @@
     "lodash.debounce": "4.0.8",
     "markdown-it": "10.0.0",
     "vue": "2.6.12",
-    "xstate": "4.15.0"
+    "xstate": "4.15.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.9",
