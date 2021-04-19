@@ -10,7 +10,7 @@
     "stylelint": "stylelint src/**/*.css"
   },
   "dependencies": {
-    "core-js": "3.10.1",
+    "core-js": "3.10.2",
     "indent.js": "0.3.5",
     "lodash.debounce": "4.0.8",
     "markdown-it": "10.0.0",
